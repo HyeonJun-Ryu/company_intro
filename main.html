@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXLOG — 제조 & 물류 솔루션</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f4f0;
+      --black: #111110;
+      --gray: #6b6b68;
+      --light: #e8e6e0;
+      --accent: #c8401a;
+      --white: #fafaf8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 4rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--light);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,.07); }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.9rem;
+      letter-spacing: .12em;
+      color: var(--black);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: .82rem; font-weight: 500; letter-spacing: .08em;
+      text-transform: uppercase; text-decoration: none; color: var(--gray);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--black); }
+    .nav-cta {
+      font-size: .82rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; text-decoration: none;
+      padding: .55rem 1.4rem;
+      background: var(--black); color: var(--white);
+      transition: background .2s;
+    }
+    .nav-cta:hover { background: var(--accent); }
+
+    /* hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--black); transition: .3s; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      padding: 0 4rem;
+      display: flex; align-items: center;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center; width: 100%; padding-top: 7rem;
+    }
+    .hero-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: .75rem; letter-spacing: .15em;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 7vw, 6.5rem);
+      line-height: .95; letter-spacing: .03em;
+      color: var(--black);
+    }
+    .hero-title em { color: var(--accent); font-style: normal; }
+    .hero-sub {
+      margin-top: 1.8rem;
+      font-size: 1.05rem; line-height: 1.8;
+      color: var(--gray); font-weight: 300; max-width: 440px;
+    }
+    .hero-btns { display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap; }
+    .btn-primary {
+      padding: .75rem 2rem; font-size: .85rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      background: var(--black); color: var(--white);
+      text-decoration: none; transition: background .2s;
+    }
+    .btn-primary:hover { background: var(--accent); }
+    .btn-outline {
+      padding: .75rem 2rem; font-size: .85rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      border: 1.5px solid var(--black); color: var(--black);
+      text-decoration: none; transition: .2s;
+    }
+    .btn-outline:hover { background: var(--black); color: var(--white); }
+
+    .hero-visual {
+      position: relative; height: 520px;
+    }
+    .hero-big-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(8rem, 16vw, 14rem);
+      color: var(--light); line-height: 1;
+      position: absolute; right: -1rem; top: 50%; transform: translateY(-50%);
+      user-select: none; letter-spacing: .04em;
+    }
+    .hero-stats {
+      position: absolute; bottom: 2rem; left: 0;
+      display: flex; gap: 3rem;
+    }
+    .stat-item {}
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem; color: var(--black); letter-spacing: .04em;
+    }
+    .stat-num span { color: var(--accent); }
+    .stat-label {
+      font-size: .75rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--gray); margin-top: .2rem; font-weight: 500;
+    }
+    .hero-card {
+      position: absolute; top: 3rem; left: 0; right: 6rem;
+      background: var(--black); color: var(--white);
+      padding: 2.5rem; display: flex; flex-direction: column; gap: 1.5rem;
+    }
+    .hero-card-title {
+      font-family: 'DM Mono', monospace; font-size: .7rem;
+      letter-spacing: .15em; text-transform: uppercase; color: var(--accent);
+    }
+    .hero-card-text { font-size: 1.1rem; line-height: 1.7; font-weight: 300; }
+    .hero-card-bar { height: 2px; background: rgba(255,255,255,.15); position: relative; }
+    .hero-card-bar::after {
+      content: ''; position: absolute; left: 0; top: 0;
+      height: 2px; width: 65%; background: var(--accent);
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      background: var(--black); padding: .9rem 0; overflow: hidden;
+      border-top: 1px solid #222; border-bottom: 1px solid #222;
+    }
+    .marquee-track {
+      display: flex; gap: 4rem; white-space: nowrap;
+      animation: marquee 20s linear infinite;
+    }
+    .marquee-track span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem; letter-spacing: .1em; color: var(--light);
+    }
+    .marquee-track span.dot { color: var(--accent); }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      padding: 8rem 4rem;
+      display: grid; grid-template-columns: 1fr 1.2fr; gap: 6rem; align-items: center;
+    }
+    .section-label {
+      font-family: 'DM Mono', monospace; font-size: .72rem;
+      letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 1.2rem; display: flex; align-items: center; gap: .8rem;
+    }
+    .section-label::before {
+      content: ''; width: 2rem; height: 1px; background: var(--accent);
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      line-height: 1.05; letter-spacing: .03em; color: var(--black);
+    }
+    .section-title em { color: var(--accent); font-style: normal; }
+    .about-text { margin-top: 1.5rem; font-size: .98rem; line-height: 2; color: var(--gray); font-weight: 300; }
+    .about-values {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 2.5rem;
+    }
+    .value-card {
+      border: 1px solid var(--light); padding: 1.5rem;
+      transition: border-color .2s, transform .2s;
+    }
+    .value-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .value-icon { font-size: 1.5rem; margin-bottom: .8rem; }
+    .value-title { font-size: .85rem; font-weight: 700; letter-spacing: .06em; margin-bottom: .4rem; text-transform: uppercase; }
+    .value-desc { font-size: .82rem; color: var(--gray); line-height: 1.7; }
+
+    .about-right { position: relative; }
+    .about-img-wrap {
+      background: var(--black); aspect-ratio: 3/4; max-width: 420px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .about-img-inner {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 7rem; color: rgba(255,255,255,.06);
+      letter-spacing: .1em; text-align: center; line-height: 1;
+    }
+    .about-badge {
+      position: absolute; bottom: -1.5rem; right: -1.5rem;
+      background: var(--accent); color: var(--white);
+      width: 120px; height: 120px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+    }
+    .about-badge-num { font-size: 2.5rem; line-height: 1; }
+    .about-badge-text { font-size: .65rem; letter-spacing: .1em; text-align: center; }
+    .about-timeline { margin-top: 2rem; display: flex; flex-direction: column; gap: 0; }
+    .timeline-item {
+      display: flex; gap: 1.5rem; padding: 1.2rem 0;
+      border-bottom: 1px solid var(--light);
+    }
+    .timeline-year {
+      font-family: 'DM Mono', monospace; font-size: .75rem; color: var(--accent);
+      letter-spacing: .1em; min-width: 50px; padding-top: .15rem;
+    }
+    .timeline-text { font-size: .88rem; color: var(--gray); line-height: 1.7; }
+
+    /* ── SERVICES ── */
+    #services {
+      padding: 8rem 4rem;
+      background: var(--black);
+    }
+    #services .section-label { color: var(--accent); }
+    #services .section-title { color: var(--white); }
+    .services-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
+    .services-sub { font-size: .95rem; color: rgba(255,255,255,.45); max-width: 360px; line-height: 1.8; font-weight: 300; }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; }
+    .service-card {
+      background: #1a1a18; padding: 3rem 2.5rem;
+      position: relative; overflow: hidden;
+      transition: background .3s;
+      cursor: default;
+    }
+    .service-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 3px; height: 0; background: var(--accent);
+      transition: height .4s ease;
+    }
+    .service-card:hover::before { height: 100%; }
+    .service-card:hover { background: #1f1f1d; }
+    .service-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 4rem;
+      color: rgba(255,255,255,.07); line-height: 1;
+      margin-bottom: 1.5rem;
+    }
+    .service-title {
+      font-size: 1.15rem; font-weight: 700; color: var(--white);
+      margin-bottom: 1rem; letter-spacing: .03em;
+    }
+    .service-desc { font-size: .88rem; color: rgba(255,255,255,.45); line-height: 1.9; font-weight: 300; }
+    .service-tags { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    .service-tag {
+      font-size: .7rem; padding: .3rem .8rem;
+      border: 1px solid rgba(255,255,255,.12); color: rgba(255,255,255,.4);
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+
+    /* ── TEAM ── */
+    #team { padding: 8rem 4rem; }
+    .team-header { text-align: center; margin-bottom: 4rem; }
+    .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    .team-card {
+      position: relative; overflow: hidden;
+      border: 1px solid var(--light);
+      transition: border-color .2s, transform .3s;
+    }
+    .team-card:hover { border-color: var(--accent); transform: translateY(-6px); }
+    .team-photo {
+      aspect-ratio: 3/4; background: var(--light);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif; font-size: 4rem;
+      color: rgba(0,0,0,.08); overflow: hidden; position: relative;
+    }
+    .team-photo-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .team-card:nth-child(1) .team-photo { background: #ddd9d0; }
+    .team-card:nth-child(2) .team-photo { background: #d8ddd0; }
+    .team-card:nth-child(3) .team-photo { background: #d0d4dd; }
+    .team-card:nth-child(4) .team-photo { background: #ddd0d3; }
+    .team-info { padding: 1.5rem; }
+    .team-name { font-size: 1rem; font-weight: 700; letter-spacing: .03em; }
+    .team-role { font-size: .78rem; color: var(--accent); text-transform: uppercase; letter-spacing: .08em; margin-top: .3rem; font-family: 'DM Mono', monospace; }
+    .team-bio { font-size: .82rem; color: var(--gray); line-height: 1.7; margin-top: .8rem; }
+
+    /* ── CONTACT ── */
+    #contact { padding: 8rem 4rem; background: var(--white); }
+    .contact-wrap { display: grid; grid-template-columns: 1fr 1.4fr; gap: 6rem; }
+    .contact-info-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: .06em; margin: 1rem 0 2rem; }
+    .contact-items { display: flex; flex-direction: column; gap: 1.8rem; }
+    .contact-item {}
+    .contact-item-label { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: .4rem; }
+    .contact-item-val { font-size: .95rem; color: var(--black); line-height: 1.6; }
+
+    /* Board / Form */
+    .board-wrap { }
+    .board-title { font-size: 1rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; border-bottom: 2px solid var(--black); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+
+    .board-list { margin-bottom: 2.5rem; }
+    .board-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 0; border-bottom: 1px solid var(--light);
+      cursor: pointer; transition: padding-left .2s;
+    }
+    .board-item:hover { padding-left: .5rem; }
+    .board-num { font-family: 'DM Mono', monospace; font-size: .72rem; color: var(--gray); min-width: 28px; }
+    .board-item-title { font-size: .9rem; flex: 1; }
+    .board-date { font-family: 'DM Mono', monospace; font-size: .72rem; color: var(--gray); }
+    .board-status { font-size: .68rem; padding: .2rem .6rem; text-transform: uppercase; letter-spacing: .05em; }
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-done { background: #d1fae5; color: #065f46; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label { font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .form-input, .form-select, .form-textarea {
+      padding: .75rem 1rem; border: 1.5px solid var(--light); background: var(--bg);
+      font-family: 'Noto Sans KR', sans-serif; font-size: .9rem; color: var(--black);
+      outline: none; transition: border-color .2s;
+      -webkit-appearance: none; appearance: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--black); }
+    .form-textarea { resize: vertical; min-height: 130px; }
+    .form-submit {
+      margin-top: 1rem; padding: .9rem 2.5rem;
+      background: var(--black); color: var(--white);
+      font-size: .85rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      border: none; cursor: pointer; transition: background .2s;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    .form-submit:hover { background: var(--accent); }
+    .form-success {
+      display: none; background: #d1fae5; color: #065f46;
+      padding: 1rem 1.5rem; font-size: .88rem; margin-top: 1rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black); color: rgba(255,255,255,.45);
+      padding: 4rem 4rem 2rem;
+    }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--white); letter-spacing: .12em; }
+    .footer-logo span { color: var(--accent); }
+    .footer-tagline { font-size: .82rem; color: rgba(255,255,255,.3); margin-top: .4rem; letter-spacing: .08em; }
+    .footer-links { display: flex; gap: 4rem; }
+    .footer-col-title { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--white); margin-bottom: 1.2rem; }
+    .footer-col-links { list-style: none; display: flex; flex-direction: column; gap: .7rem; }
+    .footer-col-links a { font-size: .82rem; color: rgba(255,255,255,.4); text-decoration: none; transition: color .2s; }
+    .footer-col-links a:hover { color: var(--white); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; font-size: .75rem; }
+    .footer-copy { letter-spacing: .06em; }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s, transform .7s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      nav { padding: 1.2rem 2rem; }
+      #hero, #about, #services, #team, #contact, footer { padding-left: 2rem; padding-right: 2rem; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      #about { grid-template-columns: 1fr; }
+      .about-right { display: none; }
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-wrap { grid-template-columns: 1fr; }
+      .footer-links { gap: 2rem; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.2rem; }
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      #hero, #about, #services, #team, #contact, footer { padding-left: 1.2rem; padding-right: 1.2rem; }
+      .hero-title { font-size: 3rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      .about-values { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .footer-top { flex-direction: column; gap: 2rem; }
+      .footer-links { flex-wrap: wrap; gap: 2rem; }
+      .services-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">NEX<span>LOG</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">소개</a></li>
+      <li><a href="#services">서비스</a></li>
+      <li><a href="#team">팀</a></li>
+      <li><a href="#contact">문의</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">문의하기</a>
+    <div class="hamburger" onclick="toggleMobile()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-grid">
+      <div class="hero-content reveal">
+        <p class="hero-tag">제조 & 물류 솔루션 전문기업</p>
+        <h1 class="hero-title">스마트한<br>공급망<br><em>솔루션</em></h1>
+        <p class="hero-sub">제조부터 최종 납품까지, NEXLOG는 귀사의 공급망 전반을 최적화합니다. 데이터 기반의 스마트 물류로 비용은 줄이고 효율은 높이세요.</p>
+        <div class="hero-btns">
+          <a href="#services" class="btn-primary">서비스 보기</a>
+          <a href="#contact" class="btn-outline">문의하기</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-big-num">NX</div>
+        <div class="hero-card reveal" style="transition-delay:.2s">
+          <p class="hero-card-title">당일 출고율</p>
+          <p class="hero-card-text">스마트 물류 자동화 시스템으로 업계 최고 수준의 당일 처리율을 달성합니다.</p>
+          <div class="hero-card-bar"></div>
+        </div>
+        <div class="hero-stats reveal" style="transition-delay:.4s">
+          <div class="stat-item">
+            <div class="stat-num">98<span>%</span></div>
+            <div class="stat-label">납기 준수율</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">500<span>+</span></div>
+            <div class="stat-label">협력사</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">15<span>Y</span></div>
+            <div class="stat-label">업계 경험</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span>스마트 제조</span><span class="dot">◆</span>
+      <span>물류 최적화</span><span class="dot">◆</span>
+      <span>공급망 관리</span><span class="dot">◆</span>
+      <span>창고 자동화</span><span class="dot">◆</span>
+      <span>실시간 모니터링</span><span class="dot">◆</span>
+      <span>납기 보장</span><span class="dot">◆</span>
+      <span>스마트 제조</span><span class="dot">◆</span>
+      <span>물류 최적화</span><span class="dot">◆</span>
+      <span>공급망 관리</span><span class="dot">◆</span>
+      <span>창고 자동화</span><span class="dot">◆</span>
+      <span>실시간 모니터링</span><span class="dot">◆</span>
+      <span>납기 보장</span><span class="dot">◆</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div>
+      <p class="section-label reveal">회사 소개</p>
+      <h2 class="section-title reveal">신뢰를 만드는<br><em>15년의</em> 경험</h2>
+      <p class="about-text reveal">NEXLOG는 2009년 설립 이후 국내 제조·물류 분야를 선도해온 전문 기업입니다. 지속적인 기술 혁신과 현장 중심의 운영 노하우를 바탕으로, 고객사의 생산성과 물류 효율을 극대화해 드립니다.</p>
+      <div class="about-values reveal">
+        <div class="value-card">
+          <div class="value-icon">🏭</div>
+          <div class="value-title">스마트 팩토리</div>
+          <div class="value-desc">IoT 기반 생산 자동화로 불량률 0%에 도전합니다.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🚚</div>
+          <div class="value-title">물류 최적화</div>
+          <div class="value-desc">AI 라우팅으로 배송 비용과 시간을 동시에 절감합니다.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">📦</div>
+          <div class="value-title">재고 관리</div>
+          <div class="value-desc">실시간 재고 추적으로 재고 부족·과잉을 방지합니다.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🌐</div>
+          <div class="value-title">글로벌 네트워크</div>
+          <div class="value-desc">국내외 500여 협력사와 연계된 탄탄한 공급망을 운영합니다.</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="about-img-wrap reveal">
+        <div class="about-img-inner">NEXLOG<br>SINCE<br>2009</div>
+        <div class="about-badge">
+          <div class="about-badge-num">15</div>
+          <div class="about-badge-text">YEARS<br>EXPERIENCE</div>
+        </div>
+      </div>
+      <div class="about-timeline reveal" style="transition-delay:.2s">
+        <div class="timeline-item">
+          <div class="timeline-year">2009</div>
+          <div class="timeline-text">NEXLOG 법인 설립, 물류 솔루션 사업 시작</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2013</div>
+          <div class="timeline-text">스마트 팩토리 사업부 신설, 제조 자동화 진출</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2018</div>
+          <div class="timeline-text">AI 기반 수요 예측 시스템 자체 개발·특허 취득</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2024</div>
+          <div class="timeline-text">누적 협력사 500개 돌파, 업계 최고 납기 준수율 달성</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="services-header">
+      <div>
+        <p class="section-label reveal">서비스 & 제품</p>
+        <h2 class="section-title reveal">전방위 공급망<br><em>솔루션</em></h2>
+      </div>
+      <p class="services-sub reveal">제조부터 납품까지 전 과정을 아우르는 통합 솔루션을 제공합니다.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <div class="service-title">스마트 제조 자동화</div>
+        <div class="service-desc">IoT 센서 및 AI 기반 설비 제어로 생산라인을 자동화합니다. 실시간 품질 검사와 예지보전으로 설비 가동률을 극대화합니다.</div>
+        <div class="service-tags">
+          <span class="service-tag">IoT</span>
+          <span class="service-tag">AI</span>
+          <span class="service-tag">자동화</span>
+        </div>
+      </div>
+      <div class="service-card reveal" style="transition-delay:.1s">
+        <div class="service-num">02</div>
+        <div class="service-title">물류 최적화 시스템</div>
+        <div class="service-desc">AI 라우팅 엔진으로 최단 경로를 실시간 계산합니다. 다양한 운송 수단과 연계해 비용과 속도를 모두 잡습니다.</div>
+        <div class="service-tags">
+          <span class="service-tag">라우팅</span>
+          <span class="service-tag">실시간</span>
+          <span class="service-tag">최적화</span>
+        </div>
+      </div>
+      <div class="service-card reveal" style="transition-delay:.2s">
+        <div class="service-num">03</div>
+        <div class="service-title">창고 관리 솔루션</div>
+        <div class="service-desc">RFID·바코드·드론 재고 조사를 통합한 WMS로 창고 운영을 완전 자동화합니다. 입출고 오류율 0%를 목표로 합니다.</div>
+        <div class="service-tags">
+          <span class="service-tag">WMS</span>
+          <span class="service-tag">RFID</span>
+          <span class="service-tag">드론</span>
+        </div>
+      </div>
+      <div class="service-card reveal" style="transition-delay:.1s">
+        <div class="service-num">04</div>
+        <div class="service-title">공급망 컨설팅</div>
+        <div class="service-desc">현장 분석부터 개선 계획 수립까지, 검증된 전문가가 귀사의 공급망 전체를 진단하고 최적화 로드맵을 제시합니다.</div>
+        <div class="service-tags">
+          <span class="service-tag">진단</span>
+          <span class="service-tag">컨설팅</span>
+          <span class="service-tag">로드맵</span>
+        </div>
+      </div>
+      <div class="service-card reveal" style="transition-delay:.2s">
+        <div class="service-num">05</div>
+        <div class="service-title">글로벌 조달 관리</div>
+        <div class="service-desc">해외 협력사 발굴·검증부터 통관·납기 관리까지 원스톱으로 처리합니다. 리스크를 최소화하며 원가 절감을 실현합니다.</div>
+        <div class="service-tags">
+          <span class="service-tag">글로벌</span>
+          <span class="service-tag">조달</span>
+          <span class="service-tag">통관</span>
+        </div>
+      </div>
+      <div class="service-card reveal" style="transition-delay:.3s">
+        <div class="service-num">06</div>
+        <div class="service-title">데이터 분석 플랫폼</div>
+        <div class="service-desc">공급망 전 과정의 데이터를 통합 수집·분석하는 대시보드를 제공합니다. 수요 예측부터 위험 신호 감지까지 선제적으로 대응하세요.</div>
+        <div class="service-tags">
+          <span class="service-tag">BI</span>
+          <span class="service-tag">예측</span>
+          <span class="service-tag">대시보드</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section id="team">
+    <div class="team-header">
+      <p class="section-label reveal" style="justify-content:center">팀원 소개</p>
+      <h2 class="section-title reveal">최고의 전문가들이<br><em>함께</em>합니다</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-photo">
+          <div class="team-photo-inner" style="font-size:5rem;">김</div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">김태준</div>
+          <div class="team-role">CEO · 대표이사</div>
+          <div class="team-bio">15년간 제조·물류 업계를 이끌어온 리더. 스마트 팩토리 전환 프로젝트 100건 이상 총괄.</div>
+        </div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:.1s">
+        <div class="team-photo">
+          <div class="team-photo-inner" style="font-size:5rem;">이</div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">이수아</div>
+          <div class="team-role">CTO · 기술이사</div>
+          <div class="team-bio">AI 물류 최적화 알고리즘 개발 전문가. 관련 특허 7건 보유, KAIST 공학 박사.</div>
+        </div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:.2s">
+        <div class="team-photo">
+          <div class="team-photo-inner" style="font-size:5rem;">박</div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">박민혁</div>
+          <div class="team-role">COO · 운영이사</div>
+          <div class="team-bio">국내외 창고 30개소 운영 경험. 현장 최적화를 통해 물류 비용 평균 23% 절감 달성.</div>
+        </div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:.3s">
+        <div class="team-photo">
+          <div class="team-photo-inner" style="font-size:5rem;">최</div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">최유진</div>
+          <div class="team-role">Head of Sales</div>
+          <div class="team-bio">글로벌 조달 및 영업 전략 전문가. 500개 파트너사 네트워크를 구축하고 총괄 관리.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-wrap">
+      <div>
+        <p class="section-label reveal">문의하기</p>
+        <h2 class="contact-info-title reveal">함께 성장할<br>파트너를 찾습니다</h2>
+        <div class="contact-items reveal">
+          <div class="contact-item">
+            <div class="contact-item-label">주소</div>
+            <div class="contact-item-val">서울특별시 강남구 테헤란로 123<br>넥스로그빌딩 12층</div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-label">전화</div>
+            <div class="contact-item-val">02-1234-5678</div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-label">이메일</div>
+            <div class="contact-item-val">info@nexlog.co.kr</div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-label">영업시간</div>
+            <div class="contact-item-val">월–금 09:00 – 18:00<br>토·일·공휴일 휴무</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="board-wrap reveal">
+        <div class="board-title">문의 게시판</div>
+
+        <!-- 기존 문의 목록 -->
+        <div class="board-list" id="boardList">
+          <div class="board-item">
+            <span class="board-num">003</span>
+            <span class="board-item-title">스마트 팩토리 도입 비용 문의</span>
+            <span class="board-date">2025.01.15</span>
+            <span class="board-status status-done">답변완료</span>
+          </div>
+          <div class="board-item">
+            <span class="board-num">002</span>
+            <span class="board-item-title">WMS 솔루션 데모 요청</span>
+            <span class="board-date">2025.01.10</span>
+            <span class="board-status status-done">답변완료</span>
+          </div>
+          <div class="board-item">
+            <span class="board-num">001</span>
+            <span class="board-item-title">글로벌 조달 컨설팅 파트너십 제안</span>
+            <span class="board-date">2025.01.05</span>
+            <span class="board-status status-pending">검토중</span>
+          </div>
+        </div>
+
+        <!-- 문의 작성 폼 -->
+        <div class="form-grid" id="contactForm">
+          <div class="form-group">
+            <label class="form-label">이름 *</label>
+            <input type="text" class="form-input" id="fname" placeholder="홍길동" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">회사명</label>
+            <input type="text" class="form-input" id="fcompany" placeholder="(주)회사명" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">연락처 *</label>
+            <input type="text" class="form-input" id="fphone" placeholder="010-0000-0000" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">이메일 *</label>
+            <input type="email" class="form-input" id="femail" placeholder="example@company.com" />
+          </div>
+          <div class="form-group full">
+            <label class="form-label">문의 유형</label>
+            <select class="form-select" id="ftype">
+              <option value="">선택해주세요</option>
+              <option>스마트 제조 자동화</option>
+              <option>물류 최적화 시스템</option>
+              <option>창고 관리 솔루션</option>
+              <option>공급망 컨설팅</option>
+              <option>글로벌 조달 관리</option>
+              <option>기타</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">문의 내용 *</label>
+            <textarea class="form-textarea" id="fmessage" placeholder="문의 내용을 자유롭게 작성해 주세요."></textarea>
+          </div>
+          <div class="form-group full">
+            <button class="form-submit" onclick="submitForm()">문의 제출하기 →</button>
+            <div class="form-success" id="formSuccess">✓ 문의가 성공적으로 접수되었습니다. 영업일 1~2일 내에 답변드리겠습니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">NEX<span>LOG</span></div>
+        <div class="footer-tagline">Smart Manufacturing & Logistics Solutions</div>
+      </div>
+      <div class="footer-links">
+        <div>
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-col-links">
+            <li><a href="#about">회사 소개</a></li>
+            <li><a href="#team">팀원 소개</a></li>
+            <li><a href="#">채용 공고</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Services</div>
+          <ul class="footer-col-links">
+            <li><a href="#services">스마트 제조</a></li>
+            <li><a href="#services">물류 최적화</a></li>
+            <li><a href="#services">컨설팅</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Contact</div>
+          <ul class="footer-col-links">
+            <li><a href="#contact">문의하기</a></li>
+            <li><a href="#">오시는 길</a></li>
+            <li><a href="#">뉴스레터</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 NEXLOG Co., Ltd. All rights reserved.</span>
+      <span>개인정보처리방침 · 이용약관</span>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll nav effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Mobile menu
+    function toggleMobile() {
+      const links = document.querySelector('.nav-links');
+      if (links.style.display === 'flex') {
+        links.style.display = '';
+      } else {
+        links.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:var(--bg);padding:2rem;gap:1.5rem;border-bottom:1px solid var(--light);z-index:99;';
+      }
+    }
+
+    // Form submit
+    let nextNum = 4;
+    function submitForm() {
+      const name = document.getElementById('fname').value.trim();
+      const email = document.getElementById('femail').value.trim();
+      const phone = document.getElementById('fphone').value.trim();
+      const message = document.getElementById('fmessage').value.trim();
+      const type = document.getElementById('ftype').value;
+
+      if (!name || !email || !phone || !message) {
+        alert('필수 항목(이름, 연락처, 이메일, 문의 내용)을 모두 입력해 주세요.');
+        return;
+      }
+
+      // Add to board
+      const board = document.getElementById('boardList');
+      const today = new Date();
+      const dateStr = `${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')}`;
+      const title = (type || '일반 문의') + ' — ' + name;
+      const item = document.createElement('div');
+      item.className = 'board-item';
+      item.innerHTML = `
+        <span class="board-num">${String(nextNum++).padStart(3,'0')}</span>
+        <span class="board-item-title">${title}</span>
+        <span class="board-date">${dateStr}</span>
+        <span class="board-status status-pending">검토중</span>
+      `;
+      board.insertBefore(item, board.firstChild);
+
+      // Clear form
+      ['fname','fcompany','fphone','femail','fmessage'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('ftype').value = '';
+      document.getElementById('formSuccess').style.display = 'block';
+      setTimeout(() => document.getElementById('formSuccess').style.display = 'none', 5000);
+    }
+  </script>
+</body>
+</html>
